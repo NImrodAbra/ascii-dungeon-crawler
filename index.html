@@ -1,419 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>ASCII Dungeon Crawler</title>
-      <style>
-                * {
-                              margin: 0;
-                              padding: 0;
-                              box-sizing: border-box;
-                }
-
-                body {
-                              background-color: #0a0e27;
-                              color: #00ff00;
-                              font-family: 'Courier New', monospace;
-                              display: flex;
-                              justify-content: center;
-                              align-items: center;
-                              min-height: 100vh;
-                              padding: 20px;
-                }
-
-                .container {
-                              width: 100%;
-                              max-width: 800px;
-                }
-
-                .header {
-                              text-align: center;
-                              margin-bottom: 20px;
-                              border: 2px solid #00ff00;
-                              padding: 15px;
-                              background-color: #1a1f3a;
-                }
-
-                h1 {
-                              font-size: 24px;
-                              margin-bottom: 5px;
-                              text-shadow: 0 0 10px #00ff00;
-                }
-
-                .game-board {
-                              background-color: #000;
-                              border: 3px solid #00ff00;
-                              padding: 10px;
-                              margin-bottom: 15px;
-                              box-shadow: 0 0 20px #00ff00;
-                              line-height: 1.2;
-                              word-wrap: break-word;
-                              white-space: pre-wrap;
-                              font-size: 14px;
-                }
-
-                .stats {
-                              display: grid;
-                              grid-template-columns: 1fr 1fr 1fr 1fr;
-                              gap: 10px;
-                              margin-bottom: 15px;
-                }
-
-                .stat-box {
-                              border: 2px solid #00ff00;
-                              padding: 10px;
-                              background-color: #1a1f3a;
-                              text-align: center;
-                }
-
-                .stat-label {
-                              font-size: 12px;
-                              opacity: 0.7;
-                }
-
-                .stat-value {
-                              font-size: 20px;
-                              font-weight: bold;
-                }
-
-                .controls {
-                              border: 2px solid #00ff00;
-                              padding: 15px;
-                              background-color: #1a1f3a;
-                              text-align: center;
-                              margin-bottom: 15px;
-                }
-
-                .legend {
-                              border: 2px solid #00ff00;
-                              padding: 15px;
-                              background-color: #1a1f3a;
-                              margin-bottom: 15px;
-                              font-size: 13px;
-                }
-
-                .legend-item {
-                              margin: 5px 0;
-                }
-
-                .message {
-                              border: 2px solid #ff6600;
-                              padding: 10px;
-                              background-color: #1a1f3a;
-                              color: #ff6600;
-                              margin-bottom: 15px;
-                              min-height: 40px;
-                              display: flex;
-                              align-items: center;
-                }
-
-                button {
-                              background-color: #00ff00;
-                              color: #000;
-                              border: 2px solid #00ff00;
-                              padding: 10px 20px;
-                              font-family: 'Courier New', monospace;
-                              font-size: 14px;
-                              cursor: pointer;
-                              font-weight: bold;
-                              transition: all 0.3s;
-                }
-
-                button:hover {
-                              background-color: #00cc00;
-                              box-shadow: 0 0 10px #00ff00;
-                }
-
-                .game-over {
-                              color: #ff0000;
-                }
-
-                .game-won {
-                              color: #ffff00;
-                }
-            </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII Dungeon Crawler</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background-color: #0a0e27; color: #00ff00; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+    .container { width: 100%; max-width: 800px; }
+    .header { text-align: center; margin-bottom: 20px; border: 2px solid #00ff00; padding: 15px; background-color: #1a1f3a; }
+    h1 { font-size: 24px; margin-bottom: 5px; text-shadow: 0 0 10px #00ff00; }
+    .stats { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+    .stat-box { border: 2px solid #00ff00; padding: 10px; background-color: #1a1f3a; text-align: center; }
+    .stat-label { font-size: 12px; opacity: 0.7; }
+    .stat-value { font-size: 20px; font-weight: bold; }
+    .game-board { background-color: #000; border: 3px solid #00ff00; padding: 10px; margin-bottom: 15px; box-shadow: 0 0 20px #00ff00; line-height: 1.2; word-wrap: break-word; white-space: pre-wrap; font-size: 14px; min-height: 250px; }
+    .message { border: 2px solid #ff6600; padding: 10px; background-color: #1a1f3a; color: #ff6600; margin-bottom: 15px; min-height: 40px; display: flex; align-items: center; }
+    .controls { border: 2px solid #00ff00; padding: 15px; background-color: #1a1f3a; text-align: center; margin-bottom: 15px; }
+    .legend { border: 2px solid #00ff00; padding: 15px; background-color: #1a1f3a; margin-bottom: 15px; font-size: 13px; }
+    .legend-item { margin: 5px 0; }
+    button { background-color: #00ff00; color: #000; border: 2px solid #00ff00; padding: 10px 20px; font-family: 'Courier New', monospace; font-size: 14px; cursor: pointer; font-weight: bold; transition: all 0.3s; }
+    button:hover { background-color: #00cc00; box-shadow: 0 0 10px #00ff00; }
+    .game-over { color: #ff0000; }
+    .game-won { color: #ffff00; }
+    </style>
   </head>
   <body>
-        <div class="container">
-                  <div class="header">
-                                <h1>ASCII DUNGEON CRAWLER</h1>
-                              <p>Navigate the dungeon, collect treasure, and reach the exit!</p>
-                  </div>div>
-                
-                <div class="stats">
-                            <div class="stat-box">
-                                            <div class="stat-label">HEALTH</div>div>
-                                            <div class="stat-value" id="health">3</div>div>
-                            </div>div>
-                            <div class="stat-box">
-                                            <div class="stat-label">SCORE</div>div>
-                                            <div class="stat-value" id="score">0</div>div>
-                            </div>div>
-                            <div class="stat-box">
-                                            <div class="stat-label">TREASURES</div>div>
-                                            <div class="stat-value" id="treasure-count">0</div>div>
-                            </div>div>
-                            <div class="stat-box">
-                                            <div class="stat-label">LEVEL</div>div>
-                                            <div class="stat-value" id="level">1</div>div>
-                            </div>div>
-                </div>div>
-                
-                <div class="game-board" id="game-board"></div>div>
-                
-                <div class="message" id="message">Ready to explore? Use arrow keys to move!</div>div>
-                
-                <div class="controls">
-                            <p>Use ARROW KEYS or WASD to move</p>
-                            <button onclick="resetGame()">New Game</button>button>
-                </div>div>
-                
-                <div class="legend">
-                            <div class="legend-item"><strong>@</strong> = Your Character</div>div>
-                            <div class="legend-item"><strong>#</strong> = Walls (cannot pass)</div>div>
-                            <div class="legend-item"><strong>$</strong> = Treasure (+10 points)</div>div>
-                            <div class="legend-item"><strong>E</strong> = Enemy (avoid or game over!)</div>div>
-                            <div class="legend-item"><strong>X</strong> = Exit (reach it to win!)</div>div>
-                </div>div>
-        </div>div>
-  
-      <script>
-                const GRID_WIDTH = 40;
-                const GRID_HEIGHT = 15;
-                const EMPTY = ' ';
-                const WALL = '#';
-                const PLAYER = '@';
-                const TREASURE = '$';
-                const ENEMY = 'E';
-                const EXIT = 'X';
+    <div class="container">
+      <div class="header">
+        <h1>⚔ ASCII DUNGEON CRAWLER ⚔</h1>
+      <p>Navigate the dungeon, collect treasure, and reach the exit!</p>
+      </div>div>
+    <div class="stats">
+    <div class="stat-box"><div class="stat-label">HEALTH</div>div><div class="stat-value" id="health">3</div>div></div>div>
+    <div class="stat-box"><div class="stat-label">SCORE</div>div><div class="stat-value" id="score">0</div>div></div>div>
+    <div class="stat-box"><div class="stat-label">TREASURES</div>div><div class="stat-value" id="treasure-count">0</div>div></div>div>
+    <div class="stat-box"><div class="stat-label">LEVEL</div>div><div class="stat-value" id="level">1</div>div></div>div>
+    </div>div>
+    <div class="game-board" id="game-board"></div>div>
+    <div class="message" id="message">Ready to explore? Use arrow keys to move!</div>div>
+    <div class="controls">
+    <p>🎮 Use ARROW KEYS or WASD to move</p>
+    <button onclick="resetGame()">New Game</button>button>
+    </div>div>
+    <div class="legend">
+    <div class="legend-item"><strong>@</strong> = Your Character</div>div>
+    <div class="legend-item"><strong>#</strong> = Walls (cannot pass)</div>div>
+    <div class="legend-item"><strong>$</strong> = Treasure (+10 points)</div>div>
+    <div class="legend-item"><strong>E</strong> = Enemy (avoid!)</div>div>
+    <div class="legend-item"><strong>X</strong> = Exit (win!)</div>div>
+    </div>div>
+    </div>div>
+  <script>
+    const GRID_WIDTH = 40, GRID_HEIGHT = 15;
+    const EMPTY = ' ', WALL = '#', PLAYER = '@', TREASURE = '$', ENEMY = 'E', EXIT = 'X';
+    let game = { grid: [], playerX: 2, playerY: 2, health: 3, score: 0, treasureCount: 0, enemies: [], treasures: [], gameOver: false, won: false, level: 1 };
 
-                let game = {
-                              grid: [],
-                              playerX: 2,
-                              playerY: 2,
-                              health: 3,
-                              score: 0,
-                              treasureCount: 0,
-                              enemies: [],
-                              treasures: [],
-                              gameOver: false,
-                              won: false,
-                              level: 1
-                };
+    function initializeGame() {
+        game.grid = [];
+        for (let y = 0; y < GRID_HEIGHT; y++) {
+              game.grid[y] = [];
+              for (let x = 0; x < GRID_WIDTH; x++) game.grid[y][x] = EMPTY;
+        }
+        game.playerX = 2; game.playerY = 2; game.health = 3; game.score = 0; game.treasureCount = 0;
+        game.gameOver = false; game.won = false; game.level = 1; game.enemies = []; game.treasures = [];
 
-                function initializeGame() {
-                              game.grid = createGrid();
-                              game.playerX = 2;
-                              game.playerY = 2;
-                              game.health = 3;
-                              game.score = 0;
-                              game.treasureCount = 0;
-                              game.gameOver = false;
-                              game.won = false;
-                              game.level = 1;
-                              game.enemies = [];
-                              game.treasures = [];
+        for (let i = 0; i < 100; i++) {
+              let x = Math.floor(Math.random() * GRID_WIDTH);
+              let y = Math.floor(Math.random() * GRID_HEIGHT);
+              if (!(x < 5 && y < 5) && !(x > GRID_WIDTH - 10 && y > GRID_HEIGHT - 5)) game.grid[y][x] = WALL;
+        }
 
-                              for (let i = 0; i < 100; i++) {
-                                                let x = Math.floor(Math.random() * GRID_WIDTH);
-                                                let y = Math.floor(Math.random() * GRID_HEIGHT);
-                                                if (!(x < 5 && y < 5) && !(x > GRID_WIDTH - 10 && y > GRID_HEIGHT - 5)) {
-                                                                      game.grid[y][x] = WALL;
-                                                }
-                              }
+        for (let i = 0; i < 5; i++) {
+              let x, y, placed = false;
+              while (!placed) {
+                      x = Math.floor(Math.random() * GRID_WIDTH);
+                      y = Math.floor(Math.random() * GRID_HEIGHT);
+                      if (game.grid[y][x] === EMPTY && !(x < 5 && y < 5)) {
+                                game.grid[y][x] = TREASURE;
+                                game.treasures.push({x, y});
+                                placed = true;
+                      }
+              }
+        }
 
-                              for (let i = 0; i < 5; i++) {
-                                                let x, y, placed = false;
-                                                while (!placed) {
-                                                                      x = Math.floor(Math.random() * GRID_WIDTH);
-                                                                      y = Math.floor(Math.random() * GRID_HEIGHT);
-                                                                      if (game.grid[y][x] === EMPTY && !(x < 5 && y < 5)) {
-                                                                                                game.grid[y][x] = TREASURE;
-                                                                                                game.treasures.push({x, y});
-                                                                                                placed = true;
-                                                                      }
-                                                }
-                              }
+        for (let i = 0; i < 3; i++) {
+              let x, y, placed = false;
+              while (!placed) {
+                      x = Math.floor(Math.random() * (GRID_WIDTH - 10)) + 5;
+                      y = Math.floor(Math.random() * (GRID_HEIGHT - 5)) + 2;
+                      if (game.grid[y][x] === EMPTY && (Math.abs(x - game.playerX) > 5 || Math.abs(y - game.playerY) > 5)) {
+                                game.grid[y][x] = ENEMY;
+                                game.enemies.push({x, y});
+                                placed = true;
+                      }
+              }
+        }
+        game.grid[GRID_HEIGHT - 2][GRID_WIDTH - 2] = EXIT;
+    }
 
-                              for (let i = 0; i < 3; i++) {
-                                                let x, y, placed = false;
-                                                while (!placed) {
-                                                                      x = Math.floor(Math.random() * (GRID_WIDTH - 10)) + 5;
-                                                                      y = Math.floor(Math.random() * (GRID_HEIGHT - 5)) + 2;
-                                                                      if (game.grid[y][x] === EMPTY && (Math.abs(x - game.playerX) > 5 || Math.abs(y - game.playerY) > 5)) {
-                                                                                                game.grid[y][x] = ENEMY;
-                                                                                                game.enemies.push({x, y});
-                                                                                                placed = true;
-                                                                      }
-                                                }
-                              }
+    function render() {
+        let output = '';
+        const renderGrid = game.grid.map(row => [...row]);
+        game.enemies.forEach(e => { if (e.x >= 0 && e.x < GRID_WIDTH && e.y >= 0 && e.y < GRID_HEIGHT) renderGrid[e.y][e.x] = ENEMY; });
+        game.treasures.forEach(t => { if (t.x >= 0 && t.x < GRID_WIDTH && t.y >= 0 && t.y < GRID_HEIGHT) renderGrid[t.y][t.x] = TREASURE; });
+        if (game.playerX >= 0 && game.playerX < GRID_WIDTH && game.playerY >= 0 && game.playerY < GRID_HEIGHT) renderGrid[game.playerY][game.playerX] = PLAYER;
+        for (let y = 0; y < GRID_HEIGHT; y++) output += renderGrid[y].join('') + '\n';
+        document.getElementById('game-board').textContent = output;
+    }
 
-                              game.grid[GRID_HEIGHT - 2][GRID_WIDTH - 2] = EXIT;
-                }
+    function movePlayer(dx, dy) {
+        if (game.gameOver || game.won) return;
+        const newX = game.playerX + dx, newY = game.playerY + dy;
+        if (newX < 0 || newX >= GRID_WIDTH || newY < 0 || newY >= GRID_HEIGHT) return;
+        if (game.grid[newY][newX] === WALL) return;
+        game.playerX = newX; game.playerY = newY;
 
-                function createGrid() {
-                              const grid = [];
-                              for (let y = 0; y < GRID_HEIGHT; y++) {
-                                                grid[y] = [];
-                                                for (let x = 0; x < GRID_WIDTH; x++) {
-                                                                      grid[y][x] = EMPTY;
-                                                }
-                              }
-                              return grid;
-                }
+        const treasureIndex = game.treasures.findIndex(t => t.x === game.playerX && t.y === game.playerY);
+        if (treasureIndex !== -1) { game.score += 10; game.treasureCount++; game.treasures.splice(treasureIndex, 1); document.getElementById('message').textContent = 'Found treasure! +10 points'; }
 
-                function render() {
-                              let output = '';
-                              const renderGrid = game.grid.map(row => [...row]);
+        if (game.grid[game.playerY][game.playerX] === EXIT) { game.won = true; game.score += 100; document.getElementById('message').textContent = 'YOU WON! Reached the exit!'; document.getElementById('message').className = 'message game-won'; }
 
-                              game.enemies.forEach(enemy => {
-                                                if (enemy.x >= 0 && enemy.x < GRID_WIDTH && enemy.y >= 0 && enemy.y < GRID_HEIGHT) {
-                                                                      renderGrid[enemy.y][enemy.x] = ENEMY;
-                                                }
-                              });
+        game.enemies.forEach(e => {
+              const dx = game.playerX - e.x, dy = game.playerY - e.y;
+              let moveX = 0, moveY = 0;
+              if (Math.abs(dx) > Math.abs(dy)) moveX = dx > 0 ? 1 : -1; else moveY = dy > 0 ? 1 : -1;
+              const nx = e.x + moveX, ny = e.y + moveY;
+              if (nx >= 0 && nx < GRID_WIDTH && ny >= 0 && ny < GRID_HEIGHT && game.grid[ny][nx] !== WALL) { e.x = nx; e.y = ny; }
+        });
 
-                              game.treasures.forEach(treasure => {
-                                                if (treasure.x >= 0 && treasure.x < GRID_WIDTH && treasure.y >= 0 && treasure.y < GRID_HEIGHT) {
-                                                                      renderGrid[treasure.y][treasure.x] = TREASURE;
-                                                }
-                              });
+        const hitEnemy = game.enemies.some(e => e.x === game.playerX && e.y === game.playerY);
+        if (hitEnemy) { game.health--; document.getElementById('message').textContent = 'Hit by enemy! Health: ' + game.health; if (game.health <= 0) { game.gameOver = true; document.getElementById('message').textContent = 'GAME OVER! You have been defeated!'; document.getElementById('message').className = 'message game-over'; } }
 
-                              if (game.playerX >= 0 && game.playerX < GRID_WIDTH && game.playerY >= 0 && game.playerY < GRID_HEIGHT) {
-                                                renderGrid[game.playerY][game.playerX] = PLAYER;
-                              }
+        updateStats(); render();
+    }
 
-                              for (let y = 0; y < GRID_HEIGHT; y++) {
-                                                output += renderGrid[y].join('') + '\n';
-                              }
+    function updateStats() {
+        document.getElementById('health').textContent = game.health;
+        document.getElementById('score').textContent = game.score;
+        document.getElementById('treasure-count').textContent = game.treasureCount;
+        document.getElementById('level').textContent = game.level;
+    }
 
-                              document.getElementById('game-board').textContent = output;
-                }
+    function resetGame() {
+        initializeGame();
+        updateStats();
+        render();
+        document.getElementById('message').textContent = 'Ready to explore? Use arrow keys to move!';
+        document.getElementById('message').className = 'message';
+    }
 
-                function movePlayer(dx, dy) {
-                              if (game.gameOver || game.won) return;
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') { e.preventDefault(); movePlayer(0, -1); }
+        else if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') { e.preventDefault(); movePlayer(0, 1); }
+        else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { e.preventDefault(); movePlayer(-1, 0); }
+        else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { e.preventDefault(); movePlayer(1, 0); }
+    });
 
-                              const newX = game.playerX + dx;
-                              const newY = game.playerY + dy;
-
-                              if (newX < 0 || newX >= GRID_WIDTH || newY < 0 || newY >= GRID_HEIGHT) return;
-
-                              if (game.grid[newY][newX] === WALL) return;
-
-                              game.playerX = newX;
-                              game.playerY = newY;
-
-                              const treasureIndex = game.treasures.findIndex(t => t.x === game.playerX && t.y === game.playerY);
-                              if (treasureIndex !== -1) {
-                                                game.score += 10;
-                                                game.treasureCount++;
-                                                game.treasures.splice(treasureIndex, 1);
-                                                updateMessage('Found treasure! +10 points');
-                              }
-
-                              if (game.grid[game.playerY][game.playerX] === EXIT) {
-                                                game.won = true;
-                                                game.score += 100;
-                                                updateMessage('YOU WON! Reached the exit!', 'won');
-                              }
-
-                              moveEnemies();
-
-                              const hitEnemy = game.enemies.some(e => e.x === game.playerX && e.y === game.playerY);
-                              if (hitEnemy) {
-                                                game.health--;
-                                                updateMessage('Hit by enemy! Health: ' + game.health);
-                                                if (game.health <= 0) {
-                                                                      game.gameOver = true;
-                                                                      updateMessage('GAME OVER! You have been defeated!', 'over');
-                                                }
-                              }
-
-                              updateStats();
-                              render();
-                }
-
-                function moveEnemies() {
-                              game.enemies.forEach(enemy => {
-                                                const dx = game.playerX - enemy.x;
-                                                const dy = game.playerY - enemy.y;
-
-                                                let moveX = 0, moveY = 0;
-
-                                                if (Math.abs(dx) > Math.abs(dy)) {
-                                                                      moveX = dx > 0 ? 1 : -1;
-                                                } else {
-                                                                      moveY = dy > 0 ? 1 : -1;
-                                                }
-
-                                                const newX = enemy.x + moveX;
-                                                const newY = enemy.y + moveY;
-
-                                                if (newX >= 0 && newX < GRID_WIDTH && newY >= 0 && newY < GRID_HEIGHT) {
-                                                                      if (game.grid[newY][newX] !== WALL) {
-                                                                                                enemy.x = newX;
-                                                                                                enemy.y = newY;
-                                                                      }
-                                                }
-                              });
-                }
-
-                function updateStats() {
-                              document.getElementById('health').textContent = game.health;
-                              document.getElementById('score').textContent = game.score;
-                              document.getElementById('treasure-count').textContent = game.treasureCount;
-                              document.getElementById('level').textContent = game.level;
-                }
-
-                function updateMessage(msg, type = '') {
-                              const messageEl = document.getElementById('message');
-                              messageEl.textContent = msg;
-                              messageEl.className = 'message ' + (type === 'over' ? 'game-over' : type === 'won' ? 'game-won' : '');
-                }
-
-                function resetGame() {
-                              initializeGame();
-                              updateStats();
-                              render();
-                              updateMessage('Ready to explore? Use arrow keys to move!');
-                }
-
-                document.addEventListener('keydown', (e) => {
-                              switch(e.key) {
-                                case 'ArrowUp':
-                                case 'w':
-                                case 'W':
-                                                      e.preventDefault();
-                                                      movePlayer(0, -1);
-                                                      break;
-                                case 'ArrowDown':
-                                case 's':
-                                case 'S':
-                                                      e.preventDefault();
-                                                      movePlayer(0, 1);
-                                                      break;
-                                case 'ArrowLeft':
-                                case 'a':
-                                case 'A':
-                                                      e.preventDefault();
-                                                      movePlayer(-1, 0);
-                                                      break;
-                                case 'ArrowRight':
-                                case 'd':
-                                case 'D':
-                                                      e.preventDefault();
-                                                      movePlayer(1, 0);
-                                                      break;
-                              }
-                });
-
-                window.addEventListener('load', () => {
-                              resetGame();
-                });
-      </script>
+    window.addEventListener('load', () => { resetGame(); });
+  </script>
   </body>
 </html>html>
-      </script></strong></strong></p></p></h1>
+  </script></strong></strong></p></p></h1>
   </body>
-      </style></title>
+  </style></title>
   </head>
