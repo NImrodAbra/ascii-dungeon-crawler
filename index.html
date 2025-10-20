@@ -1,70 +1,180 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ASCII Dungeon Crawler</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background-color: #0a0e27; color: #00ff00; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-    .container { width: 100%; max-width: 900px; }
-    .header { text-align: center; margin-bottom: 30px; border: 3px solid #00ff00; padding: 20px; background-color: #1a1f3a; }
-    h1 { font-size: 32px; margin-bottom: 10px; text-shadow: 0 0 10px #00ff00; letter-spacing: 2px; }
-    .header p { color: #00ff00; font-size: 14px; }
-    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
-    .stat-box { border: 2px solid #00ff00; padding: 15px; background-color: #1a1f3a; text-align: center; }
-    .stat-label { font-size: 12px; opacity: 0.8; margin-bottom: 8px; letter-spacing: 1px; }
-    .stat-value { font-size: 28px; font-weight: bold; color: #00ff00; }
-    .game-board { background-color: #000; border: 3px solid #00ff00; padding: 15px; margin-bottom: 25px; box-shadow: 0 0 30px #00ff00; line-height: 1.1; word-wrap: break-word; white-space: pre-wrap; font-size: 13px; min-height: 300px; font-family: 'Courier New', monospace; }
-    .message { border: 2px solid #ff6600; padding: 15px; background-color: #1a1f3a; color: #ff6600; margin-bottom: 25px; min-height: 30px; display: flex; align-items: center; font-size: 14px; }
-    .message.game-over { color: #ff0000; border-color: #ff0000; }
-    .message.game-won { color: #ffff00; border-color: #ffff00; }
-    .controls { border: 2px solid #00ff00; padding: 20px; background-color: #1a1f3a; text-align: center; margin-bottom: 25px; }
-    .controls p { margin-bottom: 12px; font-size: 14px; }
-    .legend { border: 2px solid #00ff00; padding: 20px; background-color: #1a1f3a; margin-bottom: 25px; font-size: 13px; }
-    .legend-item { margin: 8px 0; line-height: 1.6; }
-    button { background-color: #00ff00; color: #000; border: 2px solid #00ff00; padding: 12px 30px; font-family: 'Courier New', monospace; font-size: 14px; cursor: pointer; font-weight: bold; transition: all 0.3s; }
-    button:hover { background-color: #00cc00; box-shadow: 0 0 15px #00ff00; transform: scale(1.05); }
+    body {
+        margin: 0;
+        padding: 20px;
+        background-color: #0a0e27;
+        color: #00ff00;
+        font-family: 'Courier New', monospace;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+    main {
+        width: 100%;
+        max-width: 900px;
+    }
+    header {
+        text-align: center;
+        margin-bottom: 30px;
+        border: 3px solid #00ff00;
+        padding: 20px;
+        background-color: #1a1f3a;
+    }
+    h1 {
+        font-size: 32px;
+        margin: 0 0 10px 0;
+        text-shadow: 0 0 10px #00ff00;
+        letter-spacing: 2px;
+    }
+    header p {
+        margin: 0;
+        font-size: 14px;
+    }
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+    .stat {
+        border: 2px solid #00ff00;
+        padding: 15px;
+        background-color: #1a1f3a;
+        text-align: center;
+    }
+    .stat-label {
+        font-size: 12px;
+        opacity: 0.8;
+        margin-bottom: 8px;
+        letter-spacing: 1px;
+    }
+    .stat-value {
+        font-size: 28px;
+        font-weight: bold;
+    }
+    #game-board {
+        background-color: #000;
+        border: 3px solid #00ff00;
+        padding: 15px;
+        margin-bottom: 25px;
+        box-shadow: 0 0 30px #00ff00;
+        line-height: 1.1;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 300px;
+        font-family: 'Courier New', monospace;
+    }
+    #message {
+        border: 2px solid #ff6600;
+        padding: 15px;
+        background-color: #1a1f3a;
+        color: #ff6600;
+        margin-bottom: 25px;
+        min-height: 30px;
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+    }
+    #message.game-over {
+        color: #ff0000;
+        border-color: #ff0000;
+    }
+    #message.game-won {
+        color: #ffff00;
+        border-color: #ffff00;
+    }
+    .controls-section {
+        border: 2px solid #00ff00;
+        padding: 20px;
+        background-color: #1a1f3a;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+    .controls-section p {
+        margin: 0 0 12px 0;
+        font-size: 14px;
+    }
+    button {
+        background-color: #00ff00;
+        color: #000;
+        border: 2px solid #00ff00;
+        padding: 12px 30px;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s;
+    }
+    button:hover {
+        background-color: #00cc00;
+        box-shadow: 0 0 15px #00ff00;
+        transform: scale(1.05);
+    }
+    .legend-section {
+        border: 2px solid #00ff00;
+        padding: 20px;
+        background-color: #1a1f3a;
+        margin-bottom: 25px;
+        font-size: 13px;
+    }
+    .legend-item {
+        margin: 8px 0;
+        line-height: 1.6;
+    }
     </style>
   </head>
   <body>
-    <div class="container">
-      <div class="header">
+    <main>
+      <header>
         <h1>ASCII DUNGEON CRAWLER</h1>
       <p>Navigate the dungeon, collect treasure, and reach the exit!</p>
-      </div>div>
-    <div class="stats">
-    <div class="stat-box">
+      </header>
+    
+    <div class="stats-grid">
+    <div class="stat">
     <div class="stat-label">HEALTH</div>div>
     <div class="stat-value" id="health">3</div>div>
     </div>div>
-    <div class="stat-box">
+    <div class="stat">
     <div class="stat-label">SCORE</div>div>
     <div class="stat-value" id="score">0</div>div>
     </div>div>
-    <div class="stat-box">
+    <div class="stat">
     <div class="stat-label">TREASURES</div>div>
     <div class="stat-value" id="treasure-count">0</div>div>
     </div>div>
-    <div class="stat-box">
+    <div class="stat">
     <div class="stat-label">LEVEL</div>div>
     <div class="stat-value" id="level">1</div>div>
     </div>div>
     </div>div>
-    <div class="game-board" id="game-board"></div>div>
-    <div class="message" id="message">Ready to explore? Use arrow keys to move!</div>div>
-    <div class="controls">
+    
+    <pre id="game-board"></pre>pre>
+    
+    <div id="message">Ready to explore? Use arrow keys to move!</div>div>
+    
+    <div class="controls-section">
     <p>Use ARROW KEYS or WASD to move</p>
     <button onclick="resetGame()">New Game</button>button>
     </div>div>
-    <div class="legend">
+    
+    <div class="legend-section">
     <div class="legend-item"><strong>@</strong> = Your Character</div>div>
     <div class="legend-item"><strong>#</strong> = Walls (cannot pass)</div>div>
     <div class="legend-item"><strong>$</strong> = Treasure (+10 points)</div>div>
-    <div class="legend-item"><strong>E</strong> = Enemy (avoid or lose a life!)</div>div>
-    <div class="legend-item"><strong>X</strong> = Exit (reach it to win!)</div>div>
+    <div class="legend-item"><strong>E</strong> = Enemy (avoid!)</div>div>
+    <div class="legend-item"><strong>X</strong> = Exit (win!)</div>div>
     </div>div>
-    </div>div>
+    </main>
+  
   <script>
     const GRID_WIDTH = 40, GRID_HEIGHT = 15;
     const EMPTY = ' ', WALL = '#', PLAYER = '@', TREASURE = '$', ENEMY = 'E', EXIT = 'X';
@@ -131,9 +241,9 @@
         game.playerX = newX; game.playerY = newY;
 
         const treasureIndex = game.treasures.findIndex(t => t.x === game.playerX && t.y === game.playerY);
-        if (treasureIndex !== -1) { game.score += 10; game.treasureCount++; game.treasures.splice(treasureIndex, 1); document.getElementById('message').textContent = 'Found treasure! +10 points'; document.getElementById('message').className = 'message'; }
+        if (treasureIndex !== -1) { game.score += 10; game.treasureCount++; game.treasures.splice(treasureIndex, 1); document.getElementById('message').textContent = 'Found treasure! +10 points'; document.getElementById('message').className = ''; }
 
-        if (game.grid[game.playerY][game.playerX] === EXIT) { game.won = true; game.score += 100; document.getElementById('message').textContent = 'YOU WON! Reached the exit!'; document.getElementById('message').className = 'message game-won'; }
+        if (game.grid[game.playerY][game.playerX] === EXIT) { game.won = true; game.score += 100; document.getElementById('message').textContent = 'YOU WON! Reached the exit!'; document.getElementById('message').className = 'game-won'; }
 
         game.enemies.forEach(e => {
               const dx = game.playerX - e.x, dy = game.playerY - e.y;
@@ -144,7 +254,7 @@
         });
 
         const hitEnemy = game.enemies.some(e => e.x === game.playerX && e.y === game.playerY);
-        if (hitEnemy) { game.health--; document.getElementById('message').textContent = 'Hit by enemy! Health: ' + game.health; document.getElementById('message').className = 'message'; if (game.health <= 0) { game.gameOver = true; document.getElementById('message').textContent = 'GAME OVER! You have been defeated!'; document.getElementById('message').className = 'message game-over'; } }
+        if (hitEnemy) { game.health--; document.getElementById('message').textContent = 'Hit by enemy! Health: ' + game.health; if (game.health <= 0) { game.gameOver = true; document.getElementById('message').textContent = 'GAME OVER! You have been defeated!'; document.getElementById('message').className = 'game-over'; } }
 
         updateStats(); render();
     }
@@ -161,7 +271,7 @@
         updateStats();
         render();
         document.getElementById('message').textContent = 'Ready to explore? Use arrow keys to move!';
-        document.getElementById('message').className = 'message';
+        document.getElementById('message').className = '';
     }
 
     document.addEventListener('keydown', (e) => {
@@ -174,8 +284,11 @@
     window.addEventListener('load', () => { resetGame(); });
   </script>
   </body>
-</html>html>
+</html>
   </script></strong></strong></p></p></h1>
+      </header>
+    </main>
   </body>
   </style></title>
   </head>
+</html>
